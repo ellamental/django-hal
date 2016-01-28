@@ -447,7 +447,7 @@ Execute the following command from anywhere in the project directory:
 
 .. code-block:: console
 
-    unb build sphinx
+    unb docs build
 
 You can then open ``/docs/.build/html/index.html`` in your browser to view the
 rendered docs.
