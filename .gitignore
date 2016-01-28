@@ -10,6 +10,9 @@
 # distributions
 dist
 
+# egg build directory
+build
+
 
 # SQLite DB File
 # ==============
