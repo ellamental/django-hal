@@ -1,0 +1,584 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Contributing &mdash; Django HAL 0.0.4 documentation</title>
+  
+
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Django HAL 0.0.4 documentation" href="../index.html"/>
+        <link rel="prev" title="django_hal" href="../django_hal.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> Django HAL
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.0.4
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+                <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../django_hal.html">django_hal</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="">Contributing</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-where-to-get-the-project">How/Where to get the project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-setup-a-development-environment">How to setup a development environment</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#unb-command-line-interface">UNB Command Line Interface</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-packages">System Packages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-build-the-project">How to build the project</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-use-the-project-from-the-development-environment">How to run/use the project from the development environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-run-the-tests">How to run the tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-submit-a-patch">How to submit a patch</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#for-maintainers">For Maintainers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#how-to-merge-patches">How to merge patches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#release-process">Release Process</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#docs-for-the-docs">Docs for the Docs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#prose">Prose</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#docstrings">Docstrings</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#doctests">DocTests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#building">Building</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#distributing">Distributing</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../index.html">Django HAL</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../index.html">Docs</a> &raquo;</li>
+      
+    <li>Contributing</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="../_sources/contributing/index.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="contributing">
+<h1>Contributing<a class="headerlink" href="#contributing" title="Permalink to this headline">¶</a></h1>
+<p>This is a default contributing guide, auto-generated by <code class="docutils literal"><span class="pre">unb-cli</span> <span class="pre">template</span></code>.</p>
+<p>If this is a <a class="reference external" href="https://www.unb.services">UNB Services</a> package, the
+instructions below are probably mostly accurate.  If not, contact the project
+maintainer to verify before assuming anything below is correct (and let them
+know they should update their docs).</p>
+<div class="section" id="how-where-to-get-the-project">
+<h2>How/Where to get the project<a class="headerlink" href="#how-where-to-get-the-project" title="Permalink to this headline">¶</a></h2>
+<p>Django HAL is hosted at <a class="reference external" href="https://github.com/unbservices/django-hal">https://github.com/unbservices/django-hal</a>.</p>
+<p>You can clone the repo with the following command.</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git clone git@github.com:unbservices/django-hal.git</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-setup-a-development-environment">
+<h2>How to setup a development environment<a class="headerlink" href="#how-to-setup-a-development-environment" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="unb-command-line-interface">
+<h3>UNB Command Line Interface<a class="headerlink" href="#unb-command-line-interface" title="Permalink to this headline">¶</a></h3>
+<p>Django HAL uses
+<a class="reference external" href="https://bitbucket.org/unbsolutions/unb-cli">unb-cli</a> to simplify
+and standardize common development and project management tasks.</p>
+<p>Unfortunately, <a class="reference external" href="https://bitbucket.org/unbsolutions/unb-cli">unb-cli</a> is not
+(yet) available publically.</p>
+</div>
+<div class="section" id="system-packages">
+<h3>System Packages<a class="headerlink" href="#system-packages" title="Permalink to this headline">¶</a></h3>
+<p>You&#8217;ll need:</p>
+<ul class="simple">
+<li><code class="docutils literal"><span class="pre">git</span></code></li>
+<li><code class="docutils literal"><span class="pre">Python</span></code> (2.7)</li>
+<li><code class="docutils literal"><span class="pre">pip</span></code></li>
+<li><code class="docutils literal"><span class="pre">virtualenv</span></code> (preferably with <code class="docutils literal"><span class="pre">virtualenvwrapper</span></code>.</li>
+</ul>
+</div>
+</div>
+<div class="section" id="how-to-build-the-project">
+<h2>How to build the project<a class="headerlink" href="#how-to-build-the-project" title="Permalink to this headline">¶</a></h2>
+<p>Build with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb pip build</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-run-use-the-project-from-the-development-environment">
+<h2>How to run/use the project from the development environment<a class="headerlink" href="#how-to-run-use-the-project-from-the-development-environment" title="Permalink to this headline">¶</a></h2>
+<p>Install locally with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb pip install-local</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="how-to-run-the-tests">
+<h2>How to run the tests<a class="headerlink" href="#how-to-run-the-tests" title="Permalink to this headline">¶</a></h2>
+<p>Run the full test suite and linters with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb test</span>
+</pre></div>
+</div>
+<p>Run only the linter with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb lint</span>
+</pre></div>
+</div>
+<p>Run only the tests with:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb tests</span>
+</pre></div>
+</div>
+<p>See the <code class="docutils literal"><span class="pre">unb-cli</span></code> documentation for more options/information.</p>
+</div>
+<div class="section" id="how-to-submit-a-patch">
+<h2>How to submit a patch<a class="headerlink" href="#how-to-submit-a-patch" title="Permalink to this headline">¶</a></h2>
+<ol class="arabic simple">
+<li>Before you begin development work, create a new branch off master.</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git checkout master</span>
+<span class="go">git checkout -b my-descriptive-branch-name</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Make changes and commit as you normally would.</li>
+<li>Push your branch upstream.</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git push --set-upstream origin my-descriptive-branch-name</span>
+</pre></div>
+</div>
+<ol class="arabic" start="4">
+<li><p class="first">Submit a pull request / review</p>
+<p><strong>Review early, review often.</strong></p>
+<p>When you&#8217;ve reached a state where you&#8217;re ready to share your code, create a
+pull request.  See the documentation at github.com for more
+information.</p>
+<p>Ideally you should create a pull request as soon as you have a reasonably
+coherent implementation.  Sometimes it&#8217;s helpful to open a pull request when
+all you have is a psudo-code description of the problem and implementation.</p>
+<p>Pull requests, despite the name, shouldn&#8217;t be seen as a request for a
+maintainer to merge a final, completed patch, but as the beginning of a
+conversation about a change (and possibly the concerns leading up to that
+change).</p>
+<p>Smaller patches are generally better, however, patches which are too small
+are just as hard to reason about as patches which are too big.  The &#8220;right
+size&#8221; of a patch is highly variable.  As a general rule-of-thumb, if your
+patch addresses one issue, it is probably the right size (regardless of the
+number of lines of code).</p>
+<p>Patches should, ideally, be well documented (in the project&#8217;s style), and
+contain adequate tests to test any public interface changes or additions.</p>
+</li>
+<li><p class="first">Acceptance or Rejection</p>
+<p>If your patch is accepted it will be merged by a project maintainer.  After
+the merge, you are free to delete your branch.</p>
+<p>Sometimes patches are rejected outright.  Some possible reasons: the patch
+may go against the project&#8217;s goals, an alternative implementation may have
+been decided on, or the patch author may not be willing to meet the
+submission guidelines of the project.  We welcome your contributions, but
+they must <em>contribute to</em>, not <em>detract from</em>, the project&#8217;s goals.</p>
+<p>In either case, you are now free to delete your branch.</p>
+</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git branch -D my-descriptive-branch-name</span>
+</pre></div>
+</div>
+<ol class="arabic" start="6">
+<li><p class="first">Release</p>
+<p>Although your contribution was accepted, and merged, that does not guarantee
+that it will be immediately released.  Some patches, like security patches
+and backwards-compatible critical bug fixes, may be released immediately.
+Most patches however, will be scheduled for an upcoming release.</p>
+<p>Depending on when your patch landed in the release cycle, your patch may be
+included in the next or a subsequent release.</p>
+<p>If your patch contains breaking changes, it will most likely be delayed
+until the next <em>major</em> release.  That may be a few hours or a few months,
+depending on the project.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="for-maintainers">
+<h2>For Maintainers<a class="headerlink" href="#for-maintainers" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="how-to-merge-patches">
+<h3>How to merge patches<a class="headerlink" href="#how-to-merge-patches" title="Permalink to this headline">¶</a></h3>
+<p>After a patch has been through review...</p>
+<ol class="arabic simple">
+<li>Merge master into the branch and resolve any merge conflicts.</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git checkout branch-name-to-be-merged</span>
+<span class="go">git merge master</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="2">
+<li>Test the patch by running the test suite and using the package.</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb test</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>If that process has taken a long time, go to step 1.</li>
+<li>Merge the patch into master with a squash merge.  Write a descriptive,
+coherent commit message that summarizes the changes.</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git checkout master</span>
+<span class="go">git merge branch-name-to-be-merged --squash</span>
+<span class="go">git commit</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="5">
+<li>Push to origin</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git push origin master</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="release-process">
+<h3>Release Process<a class="headerlink" href="#release-process" title="Permalink to this headline">¶</a></h3>
+<p>This is a generic release process.  If you&#8217;re reading this, the maintainers
+haven&#8217;t updated it!  Please contact them directly to learn more (and gently
+remind them to update this).</p>
+<p>Run the entire test suite and run the project itself (whatever that means).  If
+there are any quality concerns, address them before proceeding.  From this
+point on, we&#8217;ll assume that this is the code you intend to release (this
+generic process does not include a staging step).</p>
+<ol class="arabic simple">
+<li>Build the distribution:</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb pip build</span>
+</pre></div>
+</div>
+<ol class="arabic" start="2">
+<li><p class="first">Install the package locally and test that it works!</p>
+<p>If necessary, go back to development and patch any problems, then restart
+from step 1.</p>
+</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb pip install-local</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="3">
+<li>Bump the version:</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb version bump</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li>Add an appropriate entry to <code class="docutils literal"><span class="pre">/CHANGELOG</span></code>.</li>
+<li>Commit the version bump and the changelog additions.</li>
+<li>Create a tag for this release:</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git tag -am &quot;vX.X.X&quot;</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="7">
+<li>Push your version bump commit and tag.</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">git push --follow-tags</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="8">
+<li>Upload the package to the package repository.  For PyPI, you can upload to
+the &#8220;test&#8221; repository (provided it is configured in your ~/pypirc correctly)
+with:</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb pip upload {version} pypitest</span>
+</pre></div>
+</div>
+<ol class="arabic" start="9">
+<li><p class="first">Test the distribution.</p>
+<p>Visit the package page on PyPI test and verify the readme looks correct.
+Install the package from PyPI test and verify that it works.  You may want
+to setup a separate test project and virtual environment for this.  If the
+package does not work, repeat from step 1.</p>
+</li>
+<li><p class="first">Upload the package to the real PyPI repository with:</p>
+</li>
+</ol>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb pip upload {version} pypi</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="11">
+<li>Test the distribution.</li>
+</ol>
+<blockquote>
+<div>Visit the package page on PyPI and verify the readme looks correct.
+Install the package from PyPI and verify that it works.  You may want
+to setup a separate test project and virtual environment for this.  If the
+package does not work, repeat from step 1.</div></blockquote>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">pip install django-hal</span>
+</pre></div>
+</div>
+<p>For reference, your <code class="docutils literal"><span class="pre">~/.pypirc</span></code> file should look something like this:</p>
+<div class="highlight-cfg"><div class="highlight"><pre><span class="k">[distutils]</span>
+<span class="na">index-servers</span><span class="o">=</span><span class="s"></span>
+<span class="s">    pypitest</span>
+<span class="s">    pypi</span>
+
+<span class="k">[pypitest]</span>
+<span class="na">repository</span> <span class="o">=</span> <span class="s">https://testpypi.python.org/pypi</span>
+<span class="na">username</span> <span class="o">=</span> <span class="s">myusername</span>
+
+<span class="k">[pypi]</span>
+<span class="na">repository</span> <span class="o">=</span> <span class="s">https://pypi.python.org/pypi</span>
+<span class="na">username</span> <span class="o">=</span> <span class="s">myusername</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="docs-for-the-docs">
+<h2>Docs for the Docs<a class="headerlink" href="#docs-for-the-docs" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prose">
+<h3>Prose<a class="headerlink" href="#prose" title="Permalink to this headline">¶</a></h3>
+<p>Some documentation is better kept separate from the code.  For example, project
+setup/build/distribution instructions, tutorials, contributing guides, etc.</p>
+<p>For this type of documentation we have the RST files in the <code class="docutils literal"><span class="pre">/docs</span></code>
+directory.</p>
+</div>
+<div class="section" id="docstrings">
+<h3>Docstrings<a class="headerlink" href="#docstrings" title="Permalink to this headline">¶</a></h3>
+<p>Code should be documented inline with docstrings.  Docstrings should follow
+the formatting conventions in
+<a class="reference external" href="https://www.python.org/dev/peps/pep-0257/">PEP 257</a> and either the
+<a class="reference external" href="http://sphinxcontrib-napoleon.readthedocs.org/en/latest/example_numpy.html#example-numpy">NumPy</a>
+or the
+<a class="reference external" href="http://sphinxcontrib-napoleon.readthedocs.org/en/latest/example_google.html">Google</a>
+styles.</p>
+<p>Docstrings should contain examples!  Those examples should be doctested!</p>
+</div>
+<div class="section" id="doctests">
+<h3>DocTests<a class="headerlink" href="#doctests" title="Permalink to this headline">¶</a></h3>
+<p>Examples in docstrings or in prose should be done in doctest form.  Doctests
+ensure that example code in documentation does not break from changes to the
+code.  Failing doctests should be considered as serious as failing tests.</p>
+<p>Doctests are not a substitute for testing!  They are only meant to ensure that
+example code works and will continue to work.</p>
+<p>There are a few different styles of doctests to choose from.  Using the
+<code class="docutils literal"><span class="pre">doctest</span></code> directive is good for simple, self-contained examples that read
+clearly in an interpreter prompt.</p>
+<div class="highlight-python"><div class="highlight"><pre>.. doctest::
+
+   &gt;&gt;&gt; 2 + 2
+   4
+</pre></div>
+</div>
+<p>The <code class="docutils literal"><span class="pre">testcode</span></code> directive is better for declaritive or complex examples.</p>
+<div class="highlight-python"><div class="highlight"><pre>.. testcode::
+
+   def hello(name=&#39;Nick&#39;):
+     return &quot;Hello %s.&quot; % name
+
+.. testcode::
+   :hide:
+
+   print hello()
+   print hello(&#39;Fred&#39;)
+
+.. testoutput::
+   :hide:
+
+   Hello Nick.
+   Hello Fred.
+</pre></div>
+</div>
+<p>Both examples may be used with <code class="docutils literal"><span class="pre">testsetup</span></code> and <code class="docutils literal"><span class="pre">testcleanup</span></code> directives
+(see <a class="reference external" href="http://sphinx-doc.org/ext/doctest.html">the docs</a> for more examples).</p>
+<p>When choosing between the two, you have to think about the documentation
+consumer.  When writing prose documentation (like this), it will almost
+exclusively be consumed in rendered form (browser, pdf, epub, etc.), so the RST
+representation of it doesn&#8217;t matter as much.</p>
+<p>However, when writing examples in docstrings it will be just as likely that the
+consumer will be viewing the RST as the rendered output.  Therefore it&#8217;s
+important to keep the RST for docstring examples simple, clean and compact.</p>
+<p>One particularly clean method is to combine the approaches above.  For
+example, if you wanted to show the definition of the <code class="docutils literal"><span class="pre">hello</span></code> function, but
+didn&#8217;t want to show how to call it in the rendered output, you could write it
+like this:</p>
+<div class="highlight-python"><div class="highlight"><pre>.. testcode::
+
+   def hello(name=&#39;Nick&#39;):
+     return &quot;Hello %s.&quot; % name
+
+.. doctest::
+   :hide:
+
+   &gt;&gt;&gt; print hello()
+   Hello Nick.
+   &gt;&gt;&gt; print hello(&#39;Fred&#39;)
+   Hello Fred.
+</pre></div>
+</div>
+</div>
+<div class="section" id="building">
+<h3>Building<a class="headerlink" href="#building" title="Permalink to this headline">¶</a></h3>
+<p>Documentation is managed by <a class="reference external" href="http://sphinx-doc.org/">Sphinx</a>.  See &#8220;How to
+setup a development environment&#8221; for installation instructions.</p>
+<p>Execute the following command from anywhere in the project directory:</p>
+<div class="highlight-console"><div class="highlight"><pre><span class="go">unb build sphinx</span>
+</pre></div>
+</div>
+<p>You can then open <code class="docutils literal"><span class="pre">/docs/.build/html/index.html</span></code> in your browser to view the
+rendered docs.</p>
+</div>
+<div class="section" id="distributing">
+<h3>Distributing<a class="headerlink" href="#distributing" title="Permalink to this headline">¶</a></h3>
+<p>If documentation is hosted on <a class="reference external" href="https://readthedocs.org/">ReadTheDocs</a> it
+should be built automatically when a commit is pushed to master at
+<a class="reference external" href="https://github.com/unbservices/django-hal">https://github.com/unbservices/django-hal</a>.  (This has to be manually setup).</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../django_hal.html" class="btn btn-neutral" title="django_hal" accesskey="p"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2016, Nick Zarczynski.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0.0.4',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

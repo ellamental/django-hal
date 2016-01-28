@@ -1,0 +1,23 @@
+# Python
+# ======
+
+# setup.py egg-info
+*.egg-info/
+
+# compiled files
+*.py[cod]
+
+# distributions
+dist
+
+
+# SQLite DB File
+# ==============
+
+db.sqlite3
+
+
+# OS Specific Files
+# =================
+
+.DS_Store
