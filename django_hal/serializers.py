@@ -3,9 +3,12 @@ HAL serializers for Django REST Framework.
 
 """
 
+from __future__ import print_function
+
 from collections import OrderedDict
 
 from django.core.urlresolvers import reverse as dj_reverse, NoReverseMatch
+from django.utils.http import urlencode
 from rest_framework import serializers
 from rest_framework.reverse import reverse as rf_reverse
 from rest_framework.utils.serializer_helpers import ReturnDict
@@ -41,16 +44,22 @@ def reverse(*args, **kwargs):
 class LinksField(serializers.DictField):
   """HAL-style _links field.
 
-  Args:
-
-    *args(tuple): A tuple representing the relation name, and arguments to
+  Args
+  ----
+  *args : tuple
+      A tuple representing the relation name, and arguments to
       reverse the url.  Example: `(name, urlpattern, {'pk', 'pk'})`.
-      `name`: The string used to identify the url in the final output.
-      `urlpattern`: A named urlpattern.
-      `{'pk': 'pk'}`: The kwargs to pass (with the urlpattern) to `reverse`.
-        This is a dict where the key is the kwarg, and the value is the
-        attribute to lookup on the instance.  So, `{'pk', 'pk'}` would
-        translate to `{'pk': getattr(instance, 'pk')}`.
+
+      name : str
+          The string used to identify the url in the final output.
+      urlpattern : str
+          A named urlpattern.
+      kwargs : dict
+        The kwargs to pass (with the urlpattern) to `reverse`.
+
+        This is a dict where the key is the url kwarg, and the value is the
+        attribute to lookup on the instance.  So, `{'user', 'pk'}` would
+        translate to `{'user': getattr(instance, 'pk')}`.
 
   Example:
 
@@ -88,7 +97,7 @@ class LinksField(serializers.DictField):
 
       {
         '_links': {
-          'self': 'https://.../my-resource/34'
+          'self': { 'href': 'https://.../my-resource/34' }
         }
       }
 
@@ -103,8 +112,8 @@ class LinksField(serializers.DictField):
     request = self.context.get('request')
     ret = OrderedDict()
     for link in self.links:
-      rel = link[0]
-      ret[rel] = self.to_link(request, instance, *link[1:])
+      name = link[0]
+      ret[name] = self.to_link(request, instance, *link[1:])
     return ret
 
   def get_attribute(self, instance, *args, **kwargs):
@@ -121,23 +130,35 @@ class LinksField(serializers.DictField):
     """
     return instance
 
-  def to_link(self, request, instance, urlpattern, kwargs=None):
+  def to_link(self, request, instance, urlpattern, kwargs=None,
+              query_kwargs=None):
     """Return an absolute url for the given urlpattern."""
+    if query_kwargs:
+      query_kwargs = {k: getattr(instance, v) for k, v in query_kwargs.items()}
     if not kwargs:
-      return reverse(urlpattern, request=request)
+      url = reverse(urlpattern, request=request)
+      if not query_kwargs:
+        return {'href': url}
+      return {'href': '%s?%s' % (url, urlencode(query_kwargs))}
 
     if isinstance(kwargs, basestring):
       # `(ref, urlpattern, string)` where `string` is equivalent to
       # `{string: string}`
-      return reverse(urlpattern, kwargs={kwargs: getattr(instance, kwargs)},
-                     request=request)
+      url = reverse(urlpattern, kwargs={kwargs: getattr(instance, kwargs)},
+                    request=request)
+      if not query_kwargs:
+        return {'href': url}
+      return {'href': '%s?%s' % (url, urlencode(query_kwargs))}
 
     reverse_kwargs = {}
     if kwargs:
       for k, v in kwargs.items():
         reverse_kwargs[k] = getattr(instance, v)
     try:
-      return reverse(urlpattern, kwargs=reverse_kwargs, request=request)
+      url = reverse(urlpattern, kwargs=reverse_kwargs, request=request)
+      if not query_kwargs:
+        return {'href': url}
+      return {'href': '%s?%s' % (url, urlencode(query_kwargs))}
     except NoReverseMatch:
       return None
 
@@ -233,14 +254,23 @@ class HALListSerializer(BaseSerializerDataMixin, serializers.ListSerializer):
         # to get attributes from.
         raise Exception((
           "Keyword arguments can only be used with RelatedManagers.  "
-          "Good: User.email_set  Bad: Emails.objects.filter(user=user)"))
+          "Good: User.email_set  Bad: Emails.objects.filter(user=user)  "
+          "[[TODO(nick): This exception message is confusing...]]"))
 
-    resource_name = self._get_meta('resource_name') or 'items'
+    resource_name = self._get_meta('resource_name', 'items') # or 'items'
+
+    request = self.context.get('request')
+    self_url = reverse(list_reverse, request=self.context.get('request'),
+                       kwargs=kwargs)
+    if request.GET:
+        query_args = {k: v for k, v in request.GET.items()}
+        self_url = u'%s?%s' % (self_url, urlencode(query_args))
 
     ret = OrderedDict(
       _links={
-        'self': reverse(list_reverse, request=self.context.get('request'),
-                        kwargs=kwargs),
+        'self': {
+          'href': self_url,
+        },
       },
       _embedded={
         resource_name: results,
@@ -360,16 +390,27 @@ class QueryField(serializers.HyperlinkedIdentityField):
   """
   lookup_field = 'pk'
 
-  def __init__(self, view_name, url_kwarg, **kwargs):
-    assert url_kwarg is not None, 'The `url_kwarg` argument is required.'
+  def __init__(self, view_name, url_kwarg=None, query_kwarg=None, **kwargs):
+    assert url_kwarg is not None or query_kwarg is not None, 'The `url_kwarg` argument is required.'
+
     kwargs['lookup_field'] = kwargs.get('lookup_field', self.lookup_field)
     self.url_kwarg = url_kwarg
+    self.query_kwarg = query_kwarg
+
     super(QueryField, self).__init__(view_name, **kwargs)
 
   def get_url(self, obj, view_name, request, response_format):
     lookup_value = getattr(obj, self.lookup_field)
-    kwargs = {self.url_kwarg: lookup_value}
-    return reverse(view_name,
-                   kwargs=kwargs,
-                   request=request,
-                   format=response_format)
+
+    if self.url_kwarg:
+      kwargs = {self.url_kwarg: lookup_value}
+      return reverse(view_name,
+                     kwargs=kwargs,
+                     request=request,
+                     format=response_format)
+
+    url = reverse(view_name,
+                  request=request,
+                  format=response_format)
+    query_kwargs = {self.query_kwarg: lookup_value}
+    return u'%s?%s' % (url, urlencode(query_kwargs))

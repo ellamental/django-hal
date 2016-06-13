@@ -1,7 +1,15 @@
+0.0.2
+=====
+
+- `_links` now properly returns URIs as `{ 'href': URI }` instead of just a
+  string.
+- URLs may now include query string parameters
+
+
 0.0.1
 =====
 
-Initial port from unb-djutils.
+- Initial port from unb-djutils.
 
 
 Also See
