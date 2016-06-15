@@ -133,6 +133,10 @@ class LinksField(serializers.DictField):
   def to_link(self, request, instance, urlpattern, kwargs=None,
               query_kwargs=None):
     """Return an absolute url for the given urlpattern."""
+    # TODO(nick): The ``if query_kwargs`` stuff all over here is absymal.
+    #             This needs to be refactored into a cleaner solution before
+    #             it's built upon.
+
     if query_kwargs:
       query_kwargs = {k: getattr(instance, v) for k, v in query_kwargs.items()}
     if not kwargs:
