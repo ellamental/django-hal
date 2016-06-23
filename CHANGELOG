@@ -1,3 +1,9 @@
+0.0.4
+=====
+
+- Reorganize modules.  Separate fields into its own module.
+
+
 0.0.3
 =====
 
