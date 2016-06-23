@@ -1,3 +1,9 @@
+0.0.5
+=====
+
+- Fix missing imports from pushing 0.0.4 without actually running it.
+
+
 0.0.4
 =====
 

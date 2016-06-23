@@ -4,6 +4,11 @@ Serializer fields for django_hal
 """
 
 
+from collections import OrderedDict
+
+from django.utils.http import urlencode
+from rest_framework import serializers
+
 from .utils import reverse
 
 
