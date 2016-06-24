@@ -1,3 +1,16 @@
+0.0.6
+=====
+
+- Radically change the way `_links` are specified in the serializer.  We no
+  longer manually add a `_links` field.  Instead, a `_links` attribute is
+  defined on the serializer `Meta` class.  The serializer then transforms
+  this into a field at runtime.
+
+  This begins a series of changes that will ultimately give birth to a
+  `HypermediaSerializer` which is capable of serializing links and relations
+  into multiple hypermedia formats.
+
+
 0.0.5
 =====
 

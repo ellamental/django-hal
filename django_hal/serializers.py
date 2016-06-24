@@ -7,6 +7,7 @@ from __future__ import print_function
 
 from collections import OrderedDict
 
+from django.core import urlresolvers
 from django.utils.http import urlencode
 from rest_framework import serializers
 from rest_framework.utils.serializer_helpers import ReturnDict
@@ -17,6 +18,95 @@ from .utils import reverse, move_request_from_kwargs_to_context
 #             ``from django_hal.serializers import LinksField, QueryField``
 #
 from .fields import LinksField, QueryField
+
+
+def _to_link(self, request, instance, urlpattern, kwargs=None,
+            query_kwargs=None):
+    """Return an absolute url for the given urlpattern."""
+    if query_kwargs:
+        query_kwargs = {k: getattr(instance, v) for k, v in query_kwargs.items()}
+    if not kwargs:
+        url = reverse(urlpattern, request=request)
+        if not query_kwargs:
+            return {'href': url}
+        return {'href': '%s?%s' % (url, urlencode(query_kwargs))}
+
+    if isinstance(kwargs, basestring):
+        # `(ref, urlpattern, string)` where `string` is equivalent to
+        # `{string: string}`
+        url = reverse(urlpattern,
+                      kwargs={kwargs: getattr(instance, kwargs)},
+                      request=request)
+        if not query_kwargs:
+            return {'href': url}
+        return {'href': '%s?%s' % (url, urlencode(query_kwargs))}
+
+    reverse_kwargs = {}
+    if kwargs:
+        for k, v in kwargs.items():
+            reverse_kwargs[k] = getattr(instance, v)
+    try:
+        url = reverse(urlpattern, kwargs=reverse_kwargs, request=request)
+        if not query_kwargs:
+            return {'href': url}
+        return {'href': '%s?%s' % (url, urlencode(query_kwargs))}
+    except urlresolvers.NoReverseMatch:
+        return None
+
+
+def _link_to_dict(request, instance, link):
+    assert link['pattern'] or link['href'], "Link must have an href or pattern."
+
+    try:
+        if link['pattern']:
+            pattern = link['pattern'].get('pattern')
+            kwargs = link['pattern'].get('kwargs')
+            query = link['pattern'].get('query')
+
+            if kwargs:
+                kwargs = {k: getattr(instance, v) for k, v in kwargs.items()}
+                url = reverse(pattern, kwargs=kwargs, request=request)
+            else:
+                url = reverse(pattern, request=request)
+
+            if query:
+                query = {k: getattr(instance, v) for k, v in query.items()}
+                url = u'%s?%s' % (url, urlencode(query))
+
+    except urlresolvers.NoReverseMatch:
+        url = None
+        return None  # ?
+
+    ret = {
+        'href': url,
+    }
+    if link.get('name'):
+        ret['name'] = link['name']
+    if link.get('profile'):
+        ret['profile'] = link['profile']
+
+    return ret
+
+
+def _process_links(links_dict, request, instance, links):
+    ret = links_dict
+    for link in links:
+        link_dict = _link_to_dict(request, instance, link)
+
+        # If there is an existing entry for ``rel``, ``rel`` becomes
+        # an array of link objects.
+        #
+        # .. seealso:: https://tools.ietf.org/html/draft-kelly-json-hal-08#section-4.1.1
+        #
+        current = ret.get(link['rel'])
+        if not current:
+            ret[link['rel']] = link_dict
+        else:
+            if isinstance(current, dict):
+                ret[link['rel']] = [current]
+            ret[link['rel']].append(link_dict)
+    return ret
+
 
 
 class BaseSerializerDataMixin(object):
@@ -109,7 +199,9 @@ class HALListSerializer(BaseSerializerDataMixin, serializers.ListSerializer):
                     "Bad: Emails.objects.filter(user=user)  "
                     "[[TODO(nick): This exception message is confusing...]]"))
 
-        resource_name = self._get_meta('resource_name', 'items')
+        # resource_name = self._get_meta('resource_name', 'items') # DEPRECATED
+        # rel = self._get_meta('rel', 'item')  # DEPRECATED
+        profile = self._get_meta('profile', 'item')
 
         request = self.context.get('request')
         self_url = reverse(list_reverse, request=self.context.get('request'),
@@ -118,14 +210,19 @@ class HALListSerializer(BaseSerializerDataMixin, serializers.ListSerializer):
             query_args = {k: v for k, v in request.GET.items()}
             self_url = u'%s?%s' % (self_url, urlencode(query_args))
 
+        self_link = {
+            'href': self_url,
+        }
+        profile = self._get_meta('profile')
+        if profile:
+            self_link['profile'] = profile
+
         ret = OrderedDict(
             _links={
-                'self': {
-                    'href': self_url,
-                },
+                'self': self_link,
             },
             _embedded={
-                resource_name: results,
+                profile: results,
             },
         )
         return ret
@@ -139,7 +236,7 @@ class HALListSerializer(BaseSerializerDataMixin, serializers.ListSerializer):
 class HALSerializer(BaseSerializerDataMixin, serializers.Serializer):
     """Serializer that returns data in HAL-format.
 
-    For the ListSerializer to work correctly, you must define ``resource_name``
+    For the ListSerializer to work correctly, you must define ``rel``
     and ``list_reverse`` on your subclass's ``Meta`` class.
 
     """
@@ -170,6 +267,50 @@ class HALModelSerializer(BaseSerializerDataMixin, serializers.ModelSerializer):
         kwargs['child'] = cls()
         move_request_from_kwargs_to_context(kwargs)
         return HALListSerializer(*args, **kwargs)
+
+    def _get_self_link(self, instance):
+        request = self.context.get('request')
+        pattern = getattr(self.Meta, 'detail_reverse')
+
+        if isinstance(pattern, basestring):
+            pattern = (pattern, {'pk': 'pk'})
+        elif isinstance(pattern[1], basestring):
+            pattern = (pattern[0], {pattern[1]: pattern[1]})
+        return {'href': reverse(pattern[0],
+                                kwargs={k:getattr(instance, v)
+                                        for k, v in pattern[1].items()},
+                                request=request)}
+
+    def to_representation(self, instance):
+        """
+        Object instance -> Dict of primitive datatypes.
+        """
+        ret = OrderedDict()
+        fields = self._readable_fields
+
+        request = self.context.get('request')
+
+        meta_links = getattr(self.Meta, '_links', None)
+        if meta_links:
+            self_link = self._get_self_link(instance)
+            links_dict = OrderedDict(self=self_link)
+            _links = _process_links(links_dict, request, instance, meta_links)
+            ret['_links'] = _links
+
+        for field in fields:
+            try:
+                attribute = field.get_attribute(instance)
+            except SkipField:
+                continue
+
+            if attribute is None:
+                # We skip `to_representation` for `None` values so that
+                # fields do not have to explicitly deal with that case.
+                ret[field.field_name] = None
+            else:
+                ret[field.field_name] = field.to_representation(attribute)
+
+        return ret
 
 
 class HyperlinkedModelSerializer(serializers.HyperlinkedModelSerializer):
