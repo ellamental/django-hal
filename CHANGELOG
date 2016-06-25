@@ -1,3 +1,9 @@
+0.0.7
+=====
+
+- Bugfix, self is no longer used as a keyword to the OrderedDict constructor.
+
+
 0.0.6
 =====
 

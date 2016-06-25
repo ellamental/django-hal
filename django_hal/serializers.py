@@ -293,7 +293,9 @@ class HALModelSerializer(BaseSerializerDataMixin, serializers.ModelSerializer):
         meta_links = getattr(self.Meta, '_links', None)
         if meta_links:
             self_link = self._get_self_link(instance)
-            links_dict = OrderedDict(self=self_link)
+            links_dict = OrderedDict((
+                ('self', self_link),
+            ))
             _links = _process_links(links_dict, request, instance, meta_links)
             ret['_links'] = _links
 
